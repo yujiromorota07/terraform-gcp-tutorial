@@ -2,3 +2,5 @@ morota-gcp-tutorial-02e1f5c64fec.json
 .terraform
 .terraform.lock.hcl
 .terraform.tfstate.lock.info
+terraform.tfstate
+terraform.tfstate.backup
