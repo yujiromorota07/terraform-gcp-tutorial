@@ -42,6 +42,11 @@ resource "google_cloud_run_v2_service" "gcp-tutorial-server" {
         }
       }
 
+      vpc_access{
+      connector = google_vpc_access_connector.connector.id
+      egress = "ALL_TRAFFIC"
+    }
+
       volumes {
       name = "cloudsql"
       cloud_sql_instance {
