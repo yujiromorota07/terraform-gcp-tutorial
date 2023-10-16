@@ -26,31 +26,30 @@ resource "google_sql_user" "gcp-tutorial-db-user" {
   instance = google_sql_database_instance.gcp-tutorial-mysql-instance.name
   host     = "%"
   //自身で設定
-  password = ""
+  password = "tutorial"
 }
 
-resource "google_cloud_run_service" "gcp-tutorial-server" {
+resource "google_cloud_run_v2_service" "gcp-tutorial-server" {
   name     = var.project_id
   location = var.default_region
 
   template {
-    spec {
       containers {
         image = "asia.gcr.io/${var.project_id}/gcp-tutorial-server"
+        volume_mounts {
+        name       = "cloudsql"
+        mount_path = "/cloudsql"
+        }
+      }
+
+      volumes {
+      name = "cloudsql"
+      cloud_sql_instance {
+        instances = [google_sql_database_instance.gcp-tutorial-mysql-instance.connection_name]
       }
     }
   }
-
-  metadata {
-      annotations = {
-        "autoscaling.knative.dev/maxScale"      = "1000"
-        "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.gcp-tutorial-mysql-instance.connection_name
-        "run.googleapis.com/client-name"        = "terraform"
-      }
-    }
-
-  traffic {
-    percent         = 100
-    latest_revision = true
-  }
+    
+  client     = "terraform"
+  # depends_on = [google_project_service.secretmanager_api, google_project_service.cloudrun_api, google_project_service.sqladmin_api]
 }
