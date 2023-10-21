@@ -9,6 +9,9 @@ resource "google_sql_database_instance" "gcp-tutorial-mysql-instance" {
   database_version = "MYSQL_5_7"
   settings {
     tier = "db-f1-micro"
+     ip_configuration {
+      private_network = google_compute_network.this.self_link
+    }
   }
 
   deletion_protection  = "false"
