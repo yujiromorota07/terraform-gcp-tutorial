@@ -1,4 +1,3 @@
-
 resource "google_cloud_run_v2_service" "gcp-tutorial-server" {
   name     = var.project_id
   location = var.default_region
@@ -9,22 +8,42 @@ resource "google_cloud_run_v2_service" "gcp-tutorial-server" {
 
         env {
           name = "DB_HOST"
-          value = google_sql_database_instance.gcp-tutorial-mysql-instance.private_ip_address
+          value_source {
+            secret_key_ref {
+              secret = google_secret_manager_secret.db-host.secret_id
+              version  = "latest"
+            }
+          }
         }
 
         env {
           name  = "DB_DATABASE"
-          value = google_sql_database.gcp-tutorial-db.name
+          value_source {
+            secret_key_ref {
+              secret = google_secret_manager_secret.db-name.secret_id
+              version  = "latest"
+            }
+          }
         }
 
         env {
           name  = "DB_USER"
-          value = google_sql_user.gcp-tutorial-db-user.name
+          value_source {
+            secret_key_ref {
+              secret = google_secret_manager_secret.db-user.secret_id
+              version  = "latest"
+            }
+          }
         }
 
         env {
           name  = "DB_PASSWORD"
-          value = google_sql_user.gcp-tutorial-db-user.password 
+          value_source {
+            secret_key_ref {
+              secret = google_secret_manager_secret.db-password.secret_id
+              version  = "latest"
+            }
+          }
         }
 
         volume_mounts {
