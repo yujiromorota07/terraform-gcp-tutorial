@@ -9,9 +9,9 @@ resource "google_secret_manager_secret" "db-host" {
   }
 }
 
-resource "google_secret_manager_secret_version" "db-host" {
+data "google_secret_manager_secret_version" "db-host" {
   secret = google_secret_manager_secret.db-host.id
-  secret_data = "10.20.0.11"
+  version = "latest"
 }
 
 resource "google_secret_manager_secret" "db-name" {
@@ -25,9 +25,9 @@ resource "google_secret_manager_secret" "db-name" {
   }
 }
 
-resource "google_secret_manager_secret_version" "db-name" {
+data "google_secret_manager_secret_version" "db-name" {
   secret = google_secret_manager_secret.db-name.id
-  secret_data = "tutorial"
+  version = "latest"
 }
 
 resource "google_secret_manager_secret" "db-user" {
@@ -41,9 +41,9 @@ resource "google_secret_manager_secret" "db-user" {
   }
 }
 
-resource "google_secret_manager_secret_version" "db-user" {
+data "google_secret_manager_secret_version" "db-user" {
   secret = google_secret_manager_secret.db-user.id
-  secret_data = "tutorial"
+  version = "latest"
 }
 
 
@@ -58,8 +58,25 @@ resource "google_secret_manager_secret" "db-password" {
   }
 }
 
-resource "google_secret_manager_secret_version" "db-password" {
+data "google_secret_manager_secret_version" "db-password" {
   secret = google_secret_manager_secret.db-password.id
-  secret_data = "tutorial"
+  version = "latest"
+}
+
+
+resource "google_secret_manager_secret" "sample" {
+  secret_id = "SAMPLE"
+  replication {
+    user_managed {
+      replicas {
+        location = var.default_region
+      }
+    }
+  }
+}
+
+data "google_secret_manager_secret_version" "sample" {
+  secret = google_secret_manager_secret.sample.id
+  version = "latest"
 }
 

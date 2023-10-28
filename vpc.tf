@@ -31,7 +31,6 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 }
 
 resource "google_vpc_access_connector" "connector" {
-  provider      = google-beta
   name          = var.project_id
   project       = var.project_id
   region        = var.default_region

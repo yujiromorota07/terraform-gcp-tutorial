@@ -8,42 +8,27 @@ resource "google_cloud_run_v2_service" "gcp-tutorial-server" {
 
         env {
           name = "DB_HOST"
-          value_source {
-            secret_key_ref {
-              secret = google_secret_manager_secret.db-host.secret_id
-              version  = "latest"
-            }
-          }
+          value = data.google_secret_manager_secret_version.db-host.secret_data
         }
 
         env {
           name  = "DB_DATABASE"
-          value_source {
-            secret_key_ref {
-              secret = google_secret_manager_secret.db-name.secret_id
-              version  = "latest"
-            }
-          }
+          value = data.google_secret_manager_secret_version.db-name.secret_data
         }
 
         env {
           name  = "DB_USER"
-          value_source {
-            secret_key_ref {
-              secret = google_secret_manager_secret.db-user.secret_id
-              version  = "latest"
-            }
-          }
+          value = data.google_secret_manager_secret_version.db-user.secret_data
         }
 
         env {
           name  = "DB_PASSWORD"
-          value_source {
-            secret_key_ref {
-              secret = google_secret_manager_secret.db-password.secret_id
-              version  = "latest"
-            }
-          }
+          value = data.google_secret_manager_secret_version.db-password.secret_data
+        }
+
+        env {
+          name  = "SAMPLE"
+          value = data.google_secret_manager_secret_version.sample.secret_data
         }
 
         volume_mounts {
